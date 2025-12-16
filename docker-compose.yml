@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  # Banco de dados
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: monorepo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile
+      target: development
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://admin:secret@postgres:5432/monorepo_db
+      - NODE_ENV=development
+    volumes:
+      - ./packages/backend:/app/packages/backend
+      - ./packages/shared:/app/packages/shared
+      - /app/node_modules
+      - /app/packages/backend/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: bun run dev
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile
+      target: development
+    ports:
+      - "3001:3001"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:3001
+      - NODE_ENV=development
+    volumes:
+      - ./packages/frontend:/app/packages/frontend
+      - ./packages/shared:/app/packages/shared
+      - ./packages/ui:/app/packages/ui
+      - /app/node_modules
+      - /app/packages/frontend/node_modules
+      - /app/packages/frontend/.next
+    depends_on:
+      - backend
+    command: bun run dev
+
+volumes:
+  postgres_data:

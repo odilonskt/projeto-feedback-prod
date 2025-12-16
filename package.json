@@ -1,0 +1,27 @@
+{
+  "devDependencies": {
+    "turbo": "^2.6.3"
+  },
+  "name": "projeto-feedback-prod",
+  "packageManager": "bun@1.3.4",
+  "private": true,
+  "scripts": {
+    "backend:add": "cd packages/backend && bun add",
+    "both:add": "cd packages/backend && bun add $1 && cd ../frontend && bun add $1",
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "dev": "turbo run dev --parallel",
+    "frontend:add": "cd packages/frontend && bun add",
+    "install:all": "bun install && cd packages/backend && bun install && cd ../frontend && bun install",
+    "install:axios": "cd packages/backend && bun add axios && cd ../frontend && bun add axios",
+    "install:date-fns": "cd packages/backend && bun add date-fns && cd ../frontend && bun add date-fns",
+    "install:lodash": "cd packages/backend && bun add lodash && cd ../frontend && bun add lodash",
+    "reset": "rm -rf node_modules packages/*/node_modules && bun install",
+    "start": "turbo run start --parallel"
+  },
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ]
+}

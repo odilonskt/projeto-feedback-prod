@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "globalEnv": ["NODE_ENV", "DATABASE_URL", "NEXT_PUBLIC_*"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**", "!.next/cache/**"],
+      "env": ["NODE_ENV"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV=development"]
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "env": ["NODE_ENV=production"]
+    },
+    "test": {
+      "dependsOn": [],
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts"],
+      "outputs": []
+    },
+    "lint": {
+      "outputs": [],
+      "cache": false
+    },
+    "type-check": {
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}
