@@ -1,32 +1,26 @@
 {
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "baseUrl": ".",
-        "declaration": true,
-        "declarationMap": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "lib": [
-            "ES2022"
-        ],
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "paths": {
-            "@meu-monorepo/*": [
-                "packages/*/src"
-            ],
-            "@shared/*": [
-                "packages/shared/src/*"
-            ]
-        },
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
-        "strict": true,
-        "target": "ES2022"
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+
+    "paths": {
+      "@meu-monorepo/*": ["packages/*/src"],
+      "@shared/*": ["packages/shared/src/*"]
     },
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2022"
+  },
+  "exclude": ["node_modules", "dist"]
 }

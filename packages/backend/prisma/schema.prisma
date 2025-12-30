@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+model User {
+  id        String      @id @default(uuid())
+  name      String
+  email     String      @unique
+  password  String
+  role      Role        @default(USER)
+
+ profile   UserProfile?
+
+  feedbacks Feedback[]
+  likes     FeedbackLike[]
+  sessions  Session[]
+  logs      AuditLog[]
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+
+  categoryId  String
+  category    Category   @relation(fields: [categoryId], references: [id])
+
+  feedbacks   Feedback[]
+  views       ProductViewLog[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+
+  userId    String
+  productId String
+
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  likes     FeedbackLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FeedbackLike {
+  id         String   @id @default(uuid())
+  userId     String
+  feedbackId String
+
+  user       User     @relation(fields: [userId], references: [id])
+  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, feedbackId])
+}
+
+model ProductViewLog {
+  id        String   @id @default(uuid())
+  productId String
+  ip        String?
+  userAgent String?
+
+  product   Product  @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String    @id @default(uuid())
+  action    String
+  entity    String
+  entityId  String?
+  userId    String?
+
+  user      User?    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+
+model UserProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+
+  imageUrl  String?  // foto de perfil
+  bio       String?  // opcional (descrição do usuário)
+  phone     String?  // opcional
+  website   String?  // opcional
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import { AuthActions } from "@/components/AuthActions";
 import { useEffect, useState } from "react";
+import { AuthActions } from "../AuthActions";
 
 type User = {
   avatar: string;

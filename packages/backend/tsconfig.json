@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
@@ -8,19 +9,24 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "moduleResolution": "NodeNext",
     "isolatedModules": true,
     "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "noEmit": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": false,
-    "outDir": "./dist",
+    "outDir": "dist",
     "removeComments": true,
     "resolvePackageJsonExports": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strictBindCallApply": false,
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "strict": true,
     "target": "ES2023",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "types": ["node", "lodash"]
-  }
+  },
+  "include": ["src", "prisma/prisma.service.ts"]
 }
